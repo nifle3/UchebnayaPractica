@@ -4,8 +4,8 @@ namespace WpfApp1.ViewModel;
 
 public abstract class BaseAlert : Base
 {
-    protected IAlert Alert;
+    protected readonly IAlert Notifier;
 
-    protected BaseAlert(IAlert alert) =>
-        Alert = alert;
+    protected BaseAlert(IAlert notifier) =>
+        Notifier = notifier;
 }

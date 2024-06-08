@@ -18,6 +18,13 @@ public partial class RealtorsStoreContext : DbContext
     {
     }
     
+    [DbFunction("dbo", "LevenshteinDistance")]
+    public static int LevenshteinDistance(string s, string t)
+    {
+        throw new NotSupportedException("This method is only for EF Core to use.");
+    }
+
+    
     public static RealtorsStoreContext Instance => Lazy.Value;
 
     public virtual DbSet<Address> Addresses { get; set; }
@@ -326,6 +333,9 @@ public partial class RealtorsStoreContext : DbContext
                     });
         });
 
+        modelBuilder.HasDbFunction(() => LevenshteinDistance("", "")).HasName("LevenshteinDistance")
+            .HasSchema("dbo");
+        
         OnModelCreatingPartial(modelBuilder);
     }
 

@@ -37,7 +37,7 @@ public class Login : BaseAlert
     {
         if (_email != TrueEmail || _password != TruePassword)
         {
-            Alert.Alert(InvalidEmailOrPassword);
+            Notifier.Alert(InvalidEmailOrPassword);
             return;
         }
         

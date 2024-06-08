@@ -8,11 +8,12 @@ public sealed class Suggestion : BaseCrud<Model.Suggestion>
     private Model.Client _selectedClient = null!;
     private Model.Estate _selectedEstate = null!;
     private Model.Realtor _selectedRealtor = null!;
-    private int _price;
+    private decimal _price;
     
     public Suggestion(IAlert alert) : base(alert) =>
         (Suggestions, Clients, Estates, Realtors) 
-            = (new ObservableCollection<Model.Suggestion>(Context.Suggestions), Context.Clients.ToList(), Context.Estates.ToList(), Context.Realtors.ToList());
+            = (new ObservableCollection<Model.Suggestion>(Context.Suggestions), Context.Clients.ToList(), 
+                Context.Estates.ToList(), Context.Realtors.ToList());
 
     public ObservableCollection<Model.Suggestion> Suggestions { private set; get; }
 
@@ -40,24 +41,72 @@ public sealed class Suggestion : BaseCrud<Model.Suggestion>
         get => _selectedRealtor;
     }
 
-    public int Price
+    public decimal Price
     {
         set => SetField(ref _price, value);
         get => _price;
     }
 
-    protected override Task Add()
+    protected override async Task Add()
     {
-        throw new NotImplementedException();
+        var suggestion = new Model.Suggestion()
+        {
+            ClientNavigation = SelectedClient,
+            EstateNavigation = SelectedEstate,
+            Price = Price,
+            RealtorNavigation = SelectedRealtor,
+        };
+
+        try
+        {
+            var sug = await Context.Suggestions.AddAsync(suggestion);
+            await Context.SaveChangesAsync();
+
+            if (sug.IsKeySet)
+                Suggestions.Add(sug.Entity);
+            else
+                Suggestions = new ObservableCollection<Model.Suggestion>(Context.Suggestions);
+            
+            Notifier.Alert(AddSuccessMessage);
+        }
+        catch
+        {
+            Notifier.Alert(DbErrorMessage);
+        }
     }
 
-    protected override Task Delete(Model.Suggestion? entity)
+    protected override async Task Delete(Model.Suggestion? entity)
     {
-        throw new NotImplementedException();
+        if (entity is null) return;
+        
+        try
+        {
+            Context.Suggestions.Remove(entity);
+            await Context.SaveChangesAsync();
+            Suggestions.Remove(entity);
+            
+            Notifier.Alert(DeleteSuccessMessage);
+        }
+        catch
+        {
+            Notifier.Alert(DbErrorMessage);
+        }
     }
 
-    protected override void Update()
+    protected override async Task Update(Model.Suggestion? entity)
     {
-        throw new NotImplementedException();
+        if (entity is null) return;
+
+        try
+        {
+            Context.Suggestions.Update(entity);
+            await Context.SaveChangesAsync();
+            
+            Notifier.Alert(UpdateSuccessMessage);
+        }
+        catch
+        {
+            Notifier.Alert(DbErrorMessage);
+        }
     }
 }

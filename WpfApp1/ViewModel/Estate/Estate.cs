@@ -2,11 +2,9 @@
 
 namespace WpfApp1.ViewModel.Estate;
 
-public sealed class Estate : BaseDb
+public abstract class Estate : BaseDb
 {
     public Estate(IAlert alert) : base(alert)
     {
     }
-    
-    
 }

@@ -9,6 +9,6 @@ public abstract class BaseDb : BaseAlert
     
     protected RealtorsStoreContext Context;
 
-    protected BaseDb(IAlert alert) : base(alert) =>
+    protected BaseDb(IAlert notifier) : base(notifier) =>
         Context = RealtorsStoreContext.Instance;
 }
