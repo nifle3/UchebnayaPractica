@@ -2,9 +2,9 @@
 
 public sealed partial class ApartmentsNeed : Need
 {
-    public int? MinSquare { get; set; }
+    public double? MinSquare { get; set; }
 
-    public int? MaxSquare { get; set; }
+    public double? MaxSquare { get; set; }
 
     public int? MinRoomsCount { get; set; }
 

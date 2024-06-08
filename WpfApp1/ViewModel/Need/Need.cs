@@ -3,7 +3,7 @@
 namespace WpfApp1.ViewModel.Need;
 
 // TODO: Address
-public abstract class Need : BaseCrud<Model.Need>
+public abstract class Need<T> : BaseCrud<T>
 {
     private Model.Client _selectedClient = null!;
     private Model.Realtor _selectedRealtor = null!;
