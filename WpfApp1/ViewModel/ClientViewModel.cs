@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Messaging;
 using WpfApp1.Model;
-using WpfApp1.ViewModel.Messenge;
+using WpfApp1.ViewModel.Message;
 using WpfApp1.ViewModel.Service;
 
 namespace WpfApp1.ViewModel;
@@ -130,7 +130,7 @@ public sealed class ClientViewModel : BaseSearch<Client>
     {
         if (!string.IsNullOrEmpty(client.Phone) || !string.IsNullOrEmpty(client.Email)) return true;
         
-        WeakReferenceMessenger.Default.Send(new StringMessage("Телефон или почты должны быть заполнены"));
+        WeakReferenceMessenger.Default.Send(new AlertMessage("Телефон или почты должны быть заполнены"));
         return false;
     } 
 }

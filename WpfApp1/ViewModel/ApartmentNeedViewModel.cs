@@ -1,9 +1,9 @@
 ﻿using WpfApp1.Model;
-using WpfApp1.ViewModel.Utils;
+using WpfApp1.ViewModel.Service;
 
 namespace WpfApp1.ViewModel;
 
-public sealed class ApartmentNeed : Need<ApartmentsNeed>
+public sealed class ApartmentNeedViewModel : NeedViewModel<ApartmentsNeed>
 {
     private const string EstateType = "apartment";
     
@@ -14,7 +14,7 @@ public sealed class ApartmentNeed : Need<ApartmentsNeed>
     private int _minFloor = 0;
     private int _maxFloor = 0;
     
-    public ApartmentNeed(IAlert alert) : base(alert)
+    public ApartmentNeedViewModel(ICrudService<ApartmentsNeed> crudService) : base(crudService)
     {
     }
 
@@ -54,9 +54,8 @@ public sealed class ApartmentNeed : Need<ApartmentsNeed>
         get => _maxFloor;
     }
 
-    protected override async Task Add()
-    {
-        var need = new Model.ApartmentsNeed()
+    protected override ApartmentsNeed GetEntity() =>
+        new ApartmentsNeed()
         {
             ClientNavigation = SelectedClient,
             RealtorNavigation = SelectedRealtor,
@@ -69,26 +68,5 @@ public sealed class ApartmentNeed : Need<ApartmentsNeed>
             MinRoomsCount = MinRoomsCount == 0 ? null : MinRoomsCount,
         };
 
-        try
-        {
-            await Context.AddAsync(need);
-            await Context.SaveChangesAsync();
-
-            Notifier.Alert(AddSuccessMessage);
-        }
-        catch
-        {
-            Notifier.Alert(DbErrorMessage);
-        }
-    }
-
-    protected override async Task Delete(Model.ApartmentsNeed? entity)
-    {
-        if (entity is null) return;
-    }
-
-    protected override async Task Update(Model.ApartmentsNeed? entity)
-    {
-        if (entity is null) return;
-    }
+    
 }

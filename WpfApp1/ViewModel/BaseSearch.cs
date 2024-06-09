@@ -1,7 +1,6 @@
 ﻿using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using WpfApp1.ViewModel.Service;
-using WpfApp1.ViewModel.Utils;
 
 namespace WpfApp1.ViewModel;
 

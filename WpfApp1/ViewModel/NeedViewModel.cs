@@ -1,25 +1,23 @@
-﻿using WpfApp1.ViewModel.Utils;
+﻿using WpfApp1.ViewModel.Service;
 
 namespace WpfApp1.ViewModel;
 
 // TODO: Address
-public abstract class Need<T> : BaseCrud<T>
+public abstract class NeedViewModel<T> : BaseCrud<T>
 {
     private Model.Client _selectedClient = null!;
     private Model.Realtor _selectedRealtor = null!;
     private decimal _minPrice;
     private decimal _maxPrice;
 
-    protected Need(IAlert alert) : base(alert)
+    protected NeedViewModel(ICrudService<T> crudService) : base(crudService)
     {
-        Clients = Context.Clients.ToList();
-        Realtors = Context.Realtors.ToList();
     }
 
-    public List<Model.Client> Clients { private set; get; }
-    
-    public List<Model.Realtor> Realtors { private set; get; }
-    
+    public List<Model.Client> Clients { protected set; get; } = null!;
+
+    public List<Model.Realtor> Realtors { protected set; get; } = null!;
+
     public Model.Client SelectedClient
     {
         set => SetField(ref _selectedClient, value);

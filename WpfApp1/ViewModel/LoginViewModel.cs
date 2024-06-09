@@ -1,23 +1,21 @@
 ﻿using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
-using WpfApp1.ViewModel.Utils;
+using CommunityToolkit.Mvvm.Messaging;
+using WpfApp1.ViewModel.Message;
 
 namespace WpfApp1.ViewModel;
 
-public class Login : BaseAlert
+public class LoginViewModel : Base
 {
     private const string TrueEmail = "qwe@gmail.com";
     private const string TruePassword = "qwe";
     private const string InvalidEmailOrPassword = "Почта или пароль не правильные";
-    
-    private readonly IWindowedMain _openerMain;
-    
+
     private string _email = "";
     private string _password = "";
 
-    public Login(IAlert alert, IWindowedMain main) : base(alert) =>
-        (AuthenticationCommand, _openerMain)
-            = (new RelayCommand(Authentication), main);
+    public LoginViewModel() : base() =>
+        AuthenticationCommand = new RelayCommand(Authentication);
     
     private string Email
     {
@@ -37,10 +35,10 @@ public class Login : BaseAlert
     {
         if (_email != TrueEmail || _password != TruePassword)
         {
-            Notifier.Alert(InvalidEmailOrPassword);
+            WeakReferenceMessenger.Default.Send(new AlertMessage(InvalidEmailOrPassword));
             return;
         }
-        
-        _openerMain.OpenMain();
+
+        WeakReferenceMessenger.Default.Send(new OpenWindowMessage());
     }
 }

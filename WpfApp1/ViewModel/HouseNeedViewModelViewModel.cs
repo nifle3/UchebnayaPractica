@@ -1,8 +1,9 @@
-﻿using WpfApp1.ViewModel.Utils;
+﻿using WpfApp1.Model;
+using WpfApp1.ViewModel.Service;
 
 namespace WpfApp1.ViewModel;
 
-public sealed class HouseNeed : Need<HouseNeed>
+public sealed class HouseNeedViewModelViewModel : NeedViewModel<HouseNeed>
 {
     private double _minSquare = 0.0;
     private double _maxSquare = 0.0;
@@ -11,7 +12,7 @@ public sealed class HouseNeed : Need<HouseNeed>
     private int _minFloorsCount = 0;
     private int _maxFloorsCount = 0;
     
-    public HouseNeed(IAlert alert) : base(alert)
+    public HouseNeedViewModelViewModel(ICrudService<HouseNeed> crudService) : base(crudService)
     {
     }
 
@@ -51,20 +52,7 @@ public sealed class HouseNeed : Need<HouseNeed>
         get => _maxFloorsCount;
     }
 
-    protected override async Task Add()
-    {
-        var need = new Model.HouseNeed()
-        {
-            
-        };
-    }
-
-    protected override async Task Delete(HouseNeed? entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override async Task Update(HouseNeed? entity)
+    protected override HouseNeed GetEntity()
     {
         throw new NotImplementedException();
     }

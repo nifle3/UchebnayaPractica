@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using WpfApp1.ViewModel.Messenge;
+using WpfApp1.ViewModel.Message;
 using WpfApp1.ViewModel.Service;
 
 namespace WpfApp1.ViewModel;
@@ -43,11 +43,11 @@ public abstract class BaseCrud<T> : Base
         var entity = await _crudService.AddAsync(result);
         if (entity is null)
         {
-            WeakReferenceMessenger.Default.Send(new StringMessage(DbErrorMessage));
+            WeakReferenceMessenger.Default.Send(new AlertMessage(DbErrorMessage));
             return;
         }
         
-        WeakReferenceMessenger.Default.Send(new StringMessage(AddSuccessMessage));
+        WeakReferenceMessenger.Default.Send(new AlertMessage(AddSuccessMessage));
         AddEvent?.Invoke(entity);
     }
 
@@ -58,12 +58,12 @@ public abstract class BaseCrud<T> : Base
         var result = await _crudService.RemoveAsync(entity);
         if (!result)
         {
-            WeakReferenceMessenger.Default.Send(new StringMessage(DbErrorMessage));
+            WeakReferenceMessenger.Default.Send(new AlertMessage(DbErrorMessage));
             return;
         }
         
         DeleteEvent?.Invoke(entity);
-        WeakReferenceMessenger.Default.Send(new StringMessage(DeleteSuccessMessage));
+        WeakReferenceMessenger.Default.Send(new AlertMessage(DeleteSuccessMessage));
     }
 
     private async Task Update(T? entity)
@@ -76,10 +76,10 @@ public abstract class BaseCrud<T> : Base
         var result = await _crudService.UpdateAsync(entity);
         if (!result)
         {
-            WeakReferenceMessenger.Default.Send(new StringMessage(DbErrorMessage));
+            WeakReferenceMessenger.Default.Send(new AlertMessage(DbErrorMessage));
             return;
         }
         
-        WeakReferenceMessenger.Default.Send(new StringMessage(UpdateSuccessMessage));
+        WeakReferenceMessenger.Default.Send(new AlertMessage(UpdateSuccessMessage));
     }
 }
