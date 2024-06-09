@@ -1,23 +1,36 @@
 ﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Messaging;
 using WpfApp1.Model;
-using WpfApp1.ViewModel.Utils;
+using WpfApp1.ViewModel.Messenge;
+using WpfApp1.ViewModel.Service;
 
 namespace WpfApp1.ViewModel;
 
-public sealed class Client : BaseSearch<Model.Client>
+public sealed class ClientViewModel : BaseSearch<Client>
 {
+    private readonly IClientService _service;
+    
     private string _name = "";
     private string _lastName = "";
     private string _middleName = "";
     private string _phoneNumber = "";
     private string _email = "";
+    
     private string _searchName = "";
     private string _searchMiddleName = "";
     private string _searchLastName = "";
 
-    public Client(IAlert alert) : base(alert) =>
-        Clients = new ObservableCollection<Model.Client>(Context.Clients);
+    public ClientViewModel(IClientService service, ICrudService<Client> crudService) : base(crudService)
+    {
+        _service = service;
 
+        CanUpdateEvent += CanUpdate;
+        DeleteEvent += Delete;
+        AddEvent += Add;
+
+        Clients = _service.GetAll();
+    }
+    
     public string Name
     {
         set => SetField(ref _name, value);
@@ -66,54 +79,39 @@ public sealed class Client : BaseSearch<Model.Client>
         get => _searchLastName;
     }
 
-    public ObservableCollection<Model.Client> Clients { private set; get; }
-
-    protected override async Task Delete(Model.Client? client)
-    {
-        if (client is null) return;
-    }
-
-    protected override async Task Update(Model.Client? entity)
-    {
-        if (entity is null) return;
-
-        if (string.IsNullOrWhiteSpace(entity.Email) && string.IsNullOrWhiteSpace(entity.Phone))
-        {
-            Notifier.Alert("Телефон или почта должны быть заполнены");
-            return;
-        }
-    }
+    public ObservableCollection<Client> Clients { private set; get; }
 
     protected override async Task Search()
     {
         var task = Task.Run(() =>
         {
             const int minLevenstein = 3;
-            IQueryable<Model.Client> query = Context.Clients;
-        
+            IQueryable<Client> query = _service.GetForSearch();
+
 
             if (!string.IsNullOrWhiteSpace(SearchName))
                 query = query
-                    .Where(q => q.FirstName != null && RealtorsStoreContext.LevenshteinDistance(q.FirstName, SearchName) <= minLevenstein);
+                    .Where(q => q.FirstName != null &&
+                                RealtorsStoreContext.LevenshteinDistance(q.FirstName, SearchName) <= minLevenstein);
 
             if (!string.IsNullOrWhiteSpace(SearchLastName))
                 query = query
-                    .Where(q => q.LastName != null && RealtorsStoreContext.LevenshteinDistance(q.LastName, SearchLastName) <= minLevenstein);
+                    .Where(q => q.LastName != null &&
+                                RealtorsStoreContext.LevenshteinDistance(q.LastName, SearchLastName) <= minLevenstein);
 
             if (!string.IsNullOrWhiteSpace(SearchMiddleName))
                 query = query.Where(q =>
                     q.MiddleName != null && RealtorsStoreContext.LevenshteinDistance(q.MiddleName, SearchMiddleName) <=
                     minLevenstein);
-        
-            Clients = new ObservableCollection<Model.Client>(query);
+
+            Clients = new ObservableCollection<Client>(query);
         });
-        
+
         await task;
     }
 
-    protected override async Task Add()
-    {
-        var client = new Model.Client()
+    protected override Client GetEntity() =>
+        new Client()
         {
             Email = Email,
             FirstName = Name,
@@ -121,5 +119,18 @@ public sealed class Client : BaseSearch<Model.Client>
             MiddleName = MiddleName,
             Phone = PhoneNumber,
         };
-    }
+
+    private void Add(Client client) =>
+        Clients.Add(client);
+    
+    private void Delete(Client client) =>
+        Clients.Remove(client);
+
+    private bool CanUpdate(Client client)
+    {
+        if (!string.IsNullOrEmpty(client.Phone) || !string.IsNullOrEmpty(client.Email)) return true;
+        
+        WeakReferenceMessenger.Default.Send(new StringMessage("Телефон или почты должны быть заполнены"));
+        return false;
+    } 
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using WpfApp1.Model;
+using WpfApp1.ViewModel.Service;
 using WpfApp1.ViewModel.Utils;
 
 namespace WpfApp1.ViewModel;
@@ -11,7 +12,7 @@ public sealed class SuggestionViewModel : BaseCrud<Suggestion>
     private Model.Realtor _selectedRealtor = null!;
     private decimal _price;
     
-    public SuggestionViewModel(IAlert alert, ICrudService<Suggestion> service) : base(alert) =>
+    public SuggestionViewModel(ICrudService<Suggestion> service) : base() =>
         (Suggestions, Clients, Estates, Realtors) 
             = (new ObservableCollection<Suggestion>(Context.Suggestions), Context.Clients.ToList(), 
                 Context.Estates.ToList(), Context.Realtors.ToList());

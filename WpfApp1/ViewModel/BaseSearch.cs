@@ -7,7 +7,7 @@ namespace WpfApp1.ViewModel;
 
 public abstract class BaseSearch<T> : BaseCrud<T>
 {
-    protected BaseSearch(IService<T> service, IAlert notifier) : base(service, notifier)
+    protected BaseSearch(ICrudService<T> crudService) : base(crudService)
     {
         SearchCommand = new AsyncRelayCommand(Search);
     }

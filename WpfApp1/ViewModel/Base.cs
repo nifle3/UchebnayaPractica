@@ -1,6 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
-using WpfApp1.ViewModel.Utils;
 
 namespace WpfApp1.ViewModel;
 

@@ -4,9 +4,9 @@ using WpfApp1.Model;
 
 namespace WpfApp1.ViewModel.Service;
 
-public interface IRealtorService
+public interface IClientService
 {
-    public ObservableCollection<Realtor> GetAll();
+    public ObservableCollection<Client> GetAll();
 
-    public DbSet<Realtor> GetForSearch();
+    public DbSet<Client> GetForSearch();
 }

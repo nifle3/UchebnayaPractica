@@ -1,25 +1,27 @@
 ﻿using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using WpfApp1.ViewModel.Messenge;
 using WpfApp1.ViewModel.Service;
-using WpfApp1.ViewModel.Utils;
 
 namespace WpfApp1.ViewModel;
 
-public abstract class BaseCrud<T> : BaseAlert
+public abstract class BaseCrud<T> : Base
 {
-    private readonly IService<T> _service;
+    private readonly ICrudService<T> _crudService;
 
     protected const string DbErrorMessage = "Ошибка в базе данных";
-    protected const string UpdateSuccessMessage = "Запись успешно обновлена!";
-    protected const string AddSuccessMessage = "Запись успешно добавлена!";
-    protected const string DeleteSuccessMessage = "Запись успешно добавлена!";
+    private const string UpdateSuccessMessage = "Запись успешно обновлена!";
+    private const string AddSuccessMessage = "Запись успешно добавлена!";
+    private const string DeleteSuccessMessage = "Запись успешно добавлена!";
 
     protected event Predicate<T>? CanUpdateEvent;
-    protected event Action<T>? DeleteEvent; 
+    protected event Action<T>? DeleteEvent;
+    protected event Action<T>? AddEvent;
 
-    protected BaseCrud(IService<T> service, IAlert notifier) : base(notifier)
+    protected BaseCrud(ICrudService<T> crudService)
     {
-        _service = service;
+        _crudService = crudService;
         
         AddCommand = new AsyncRelayCommand(Add);
         DeleteCommand = new AsyncRelayCommand<T>(Delete);
@@ -32,22 +34,36 @@ public abstract class BaseCrud<T> : BaseAlert
     
     public ICommand UpdateCommand { private set; get; }
 
+    protected abstract T GetEntity();
     
-    protected abstract Task Add();
+    private async Task Add()
+    {
+        var result = GetEntity();
+        
+        var entity = await _crudService.AddAsync(result);
+        if (entity is null)
+        {
+            WeakReferenceMessenger.Default.Send(new StringMessage(DbErrorMessage));
+            return;
+        }
+        
+        WeakReferenceMessenger.Default.Send(new StringMessage(AddSuccessMessage));
+        AddEvent?.Invoke(entity);
+    }
 
     private async Task Delete(T? entity)
     {
         if (entity is null) return;
 
-        var result = await _service.RemoveAsync(entity);
+        var result = await _crudService.RemoveAsync(entity);
         if (!result)
         {
-            Notifier.Alert(DbErrorMessage);
+            WeakReferenceMessenger.Default.Send(new StringMessage(DbErrorMessage));
             return;
         }
         
         DeleteEvent?.Invoke(entity);
-        Notifier.Alert(DeleteSuccessMessage);
+        WeakReferenceMessenger.Default.Send(new StringMessage(DeleteSuccessMessage));
     }
 
     private async Task Update(T? entity)
@@ -57,13 +73,13 @@ public abstract class BaseCrud<T> : BaseAlert
         var isOk = CanUpdateEvent?.Invoke(entity);
         if (isOk.HasValue && !isOk.Value) return;
 
-        var result = await _service.UpdateAsync(entity);
+        var result = await _crudService.UpdateAsync(entity);
         if (!result)
         {
-            Notifier.Alert(DbErrorMessage);
+            WeakReferenceMessenger.Default.Send(new StringMessage(DbErrorMessage));
             return;
         }
         
-        Notifier.Alert(UpdateSuccessMessage);
+        WeakReferenceMessenger.Default.Send(new StringMessage(UpdateSuccessMessage));
     }
 }

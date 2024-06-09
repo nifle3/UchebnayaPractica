@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Messaging;
 using WpfApp1.Model;
 using WpfApp1.ViewModel.Service;
-using WpfApp1.ViewModel.Utils;
 
 namespace WpfApp1.ViewModel;
 
@@ -18,9 +18,13 @@ public sealed class RealtorViewModel : BaseSearch<Realtor>
     private string _searchLastName = "";
     private string _searchMiddleName = "";
 
-    public RealtorViewModel(IRealtorService service, IAlert notifier) : base(notifier)
+    public RealtorViewModel(IRealtorService service, ICrudService<Realtor> crudService) : base(crudService)
     {
         _service = service;
+
+        CanUpdateEvent += CanUpdate;
+        DeleteEvent += Delete;
+        AddEvent += Add;
 
         Realtors = _service.GetAll();
     }
@@ -94,62 +98,28 @@ public sealed class RealtorViewModel : BaseSearch<Realtor>
         
         await task;     
     }
-
-    protected override async Task Add()
-    {
-        var realtor = new Realtor()
+    
+    protected override Realtor GetEntity() =>
+        new Realtor()
         {
-            Comission = _commision,
+            Comission = Commision,
             FirstName = Name,
             LastName = LastName,
             MiddleName = MiddleName,
         };
 
-        var result = await _service.AddAsync(realtor);
-        if (result is null)
-        {
-            Notifier.Alert(DbErrorMessage);
-            return;
-        }
+    private void Add(Realtor entity) =>
+        Realtors.Add(entity);
+    
+    private void Delete(Realtor entity) =>
+        Realtors.Remove(entity);
 
-        Realtors.Add(result);
-        Notifier.Alert(AddSuccessMessage);
-    }
-
-    protected override async Task Delete(Realtor? realtor)
+    private bool CanUpdate(Realtor entity)
     {
-        if (realtor is null) return;
-
-        var isOk = await _service.RemoveAsync(realtor);
-        if (!isOk)
-        {
-            Notifier.Alert(DbErrorMessage);
-            return;
-        }
-
-        Realtors.Remove(realtor);
-        Notifier.Alert(DeleteSuccessMessage);
-    }
-
-    protected override async Task Update(Realtor? entity)
-    {
-        if (entity is null) return;
+        if (!string.IsNullOrWhiteSpace(entity.FirstName) && !string.IsNullOrWhiteSpace(entity.MiddleName) &&
+            !string.IsNullOrWhiteSpace(entity.LastName)) return true;
         
-        if (string.IsNullOrWhiteSpace(entity.FirstName) || string.IsNullOrWhiteSpace(entity.MiddleName) ||
-            string.IsNullOrWhiteSpace(entity.LastName))
-        {
-            Notifier.Alert("Фамилия, имя и отчество должны быть заполнены");
-            return;
-        }
-
-        var isOk = await _service.UpdateAsync(entity);
-        if (!isOk)
-        {
-            Notifier.Alert(DbErrorMessage);
-            return;
-        }
-        
-        Notifier.Alert(UpdateSuccessMessage);
-        
+        WeakReferenceMessenger.Default.Send("Фамилия, имя и отчество должны быть заполнены");
+        return false;
     }
 }
