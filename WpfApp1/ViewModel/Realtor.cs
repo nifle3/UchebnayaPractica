@@ -1,11 +1,14 @@
 ﻿using System.Collections.ObjectModel;
 using WpfApp1.Model;
+using WpfApp1.ViewModel.Service;
 using WpfApp1.ViewModel.Utils;
 
-namespace WpfApp1.ViewModel.Realtor;
+namespace WpfApp1.ViewModel;
 
-public sealed class Realtor : BaseSearch<Model.Realtor>
+public sealed class RealtorViewModel : BaseSearch<Realtor>
 {
+    private readonly IRealtorService _service;
+    
     private string _name = "";
     private string _lastName = "";
     private string _middleName = "";
@@ -15,10 +18,14 @@ public sealed class Realtor : BaseSearch<Model.Realtor>
     private string _searchLastName = "";
     private string _searchMiddleName = "";
 
-    public Realtor(IAlert notifier) : base(notifier) =>
-        Realtors = new ObservableCollection<Model.Realtor>(Context.Realtors);
-       
-    public ObservableCollection<Model.Realtor> Realtors { private set; get; }
+    public RealtorViewModel(IRealtorService service, IAlert notifier) : base(notifier)
+    {
+        _service = service;
+
+        Realtors = _service.GetAll();
+    }
+    
+    public ObservableCollection<Realtor> Realtors { private set; get; }
 
     public string Name
     {
@@ -67,7 +74,7 @@ public sealed class Realtor : BaseSearch<Model.Realtor>
         var task = Task.Run(() =>
         {
             const int minLevenstein = 3;
-            IQueryable<Model.Realtor> query = Context.Realtors;
+            IQueryable<Realtor> query = _service.GetForSearch();
         
 
             if (!string.IsNullOrWhiteSpace(SearchName))
@@ -82,7 +89,7 @@ public sealed class Realtor : BaseSearch<Model.Realtor>
                 query = query.Where(q =>
                     RealtorsStoreContext.LevenshteinDistance(q.MiddleName, SearchMiddleName) <= minLevenstein);
         
-            Realtors = new ObservableCollection<Model.Realtor>(query);
+            Realtors = new ObservableCollection<Realtor>(query);
         });
         
         await task;     
@@ -90,7 +97,7 @@ public sealed class Realtor : BaseSearch<Model.Realtor>
 
     protected override async Task Add()
     {
-        var realtor = new Model.Realtor()
+        var realtor = new Realtor()
         {
             Comission = _commision,
             FirstName = Name,
@@ -98,44 +105,33 @@ public sealed class Realtor : BaseSearch<Model.Realtor>
             MiddleName = MiddleName,
         };
 
-        try
-        {
-            var insertedRealtor = await Context.Realtors.AddAsync(realtor);
-            await Context.SaveChangesAsync();
-
-            if (insertedRealtor.IsKeySet)
-                Realtors.Add(insertedRealtor.Entity);
-            else
-                Realtors = new ObservableCollection<Model.Realtor>(Context.Realtors);
-            
-            Notifier.Alert(AddSuccessMessage);
-        }
-        catch
+        var result = await _service.AddAsync(realtor);
+        if (result is null)
         {
             Notifier.Alert(DbErrorMessage);
+            return;
         }
+
+        Realtors.Add(result);
+        Notifier.Alert(AddSuccessMessage);
     }
 
-    protected override async Task Delete(Model.Realtor? realtor)
+    protected override async Task Delete(Realtor? realtor)
     {
         if (realtor is null) return;
 
-        try
-        {
-            Context.Realtors.Remove(realtor);
-            await Context.SaveChangesAsync();
-
-            Realtors.Remove(realtor);
-            
-            Notifier.Alert(DeleteSuccessMessage);
-        }
-        catch
+        var isOk = await _service.RemoveAsync(realtor);
+        if (!isOk)
         {
             Notifier.Alert(DbErrorMessage);
+            return;
         }
+
+        Realtors.Remove(realtor);
+        Notifier.Alert(DeleteSuccessMessage);
     }
 
-    protected override async Task Update(Model.Realtor? entity)
+    protected override async Task Update(Realtor? entity)
     {
         if (entity is null) return;
         
@@ -146,16 +142,14 @@ public sealed class Realtor : BaseSearch<Model.Realtor>
             return;
         }
 
-        try
-        {
-            Context.Realtors.Update(entity);
-            await Context.SaveChangesAsync();
-
-            Notifier.Alert(UpdateSuccessMessage);
-        }
-        catch
+        var isOk = await _service.UpdateAsync(entity);
+        if (!isOk)
         {
             Notifier.Alert(DbErrorMessage);
+            return;
         }
+        
+        Notifier.Alert(UpdateSuccessMessage);
+        
     }
 }

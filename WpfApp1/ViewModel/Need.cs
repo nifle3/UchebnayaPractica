@@ -1,6 +1,6 @@
 ﻿using WpfApp1.ViewModel.Utils;
 
-namespace WpfApp1.ViewModel.Need;
+namespace WpfApp1.ViewModel;
 
 // TODO: Address
 public abstract class Need<T> : BaseCrud<T>

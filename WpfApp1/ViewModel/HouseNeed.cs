@@ -1,6 +1,6 @@
 ﻿using WpfApp1.ViewModel.Utils;
 
-namespace WpfApp1.ViewModel.Need;
+namespace WpfApp1.ViewModel;
 
 public sealed class HouseNeed : Need<HouseNeed>
 {
@@ -57,18 +57,6 @@ public sealed class HouseNeed : Need<HouseNeed>
         {
             
         };
-
-        try
-        {
-            await Context.HouseNeeds.AddAsync(need);
-            await Context.SaveChangesAsync();
-
-            Notifier.Alert(AddSuccessMessage);
-        }
-        catch
-        {
-            Notifier.Alert(DbErrorMessage);
-        }
     }
 
     protected override async Task Delete(HouseNeed? entity)

@@ -1,8 +1,9 @@
-﻿using WpfApp1.ViewModel.Utils;
+﻿using WpfApp1.Model;
+using WpfApp1.ViewModel.Utils;
 
-namespace WpfApp1.ViewModel.Need;
+namespace WpfApp1.ViewModel;
 
-public sealed class ApartmentNeed : Need<Model.ApartmentsNeed>
+public sealed class ApartmentNeed : Need<ApartmentsNeed>
 {
     private const string EstateType = "apartment";
     
@@ -84,34 +85,10 @@ public sealed class ApartmentNeed : Need<Model.ApartmentsNeed>
     protected override async Task Delete(Model.ApartmentsNeed? entity)
     {
         if (entity is null) return;
-
-        try
-        {
-            Context.ApartmentsNeeds.Remove(entity);
-            await Context.SaveChangesAsync();
-
-            Notifier.Alert(DeleteSuccessMessage);
-        }
-        catch
-        {
-            Notifier.Alert(DbErrorMessage);
-        }
     }
 
     protected override async Task Update(Model.ApartmentsNeed? entity)
     {
         if (entity is null) return;
-
-        try
-        {
-            Context.Update(entity);
-            await Context.SaveChangesAsync();
-
-            Notifier.Alert(UpdateSuccessMessage);
-        }
-        catch
-        {
-            Notifier.Alert(DbErrorMessage);
-        }
     }
 }

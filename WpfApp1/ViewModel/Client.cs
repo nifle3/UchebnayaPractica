@@ -2,7 +2,7 @@
 using WpfApp1.Model;
 using WpfApp1.ViewModel.Utils;
 
-namespace WpfApp1.ViewModel.Client;
+namespace WpfApp1.ViewModel;
 
 public sealed class Client : BaseSearch<Model.Client>
 {
@@ -71,19 +71,6 @@ public sealed class Client : BaseSearch<Model.Client>
     protected override async Task Delete(Model.Client? client)
     {
         if (client is null) return;
-        
-        try
-        {
-            Context.Clients.Remove(client);
-            await Context.SaveChangesAsync();
-            
-            Clients.Remove(client);
-            Notifier.Alert(DeleteSuccessMessage);
-        }
-        catch
-        {
-            Notifier.Alert(DbErrorMessage);
-        }
     }
 
     protected override async Task Update(Model.Client? entity)
@@ -94,18 +81,6 @@ public sealed class Client : BaseSearch<Model.Client>
         {
             Notifier.Alert("Телефон или почта должны быть заполнены");
             return;
-        }
-
-        try
-        {
-            Context.Clients.Update(entity);
-            await Context.SaveChangesAsync();
-            
-            Notifier.Alert(UpdateSuccessMessage);
-        }
-        catch
-        {
-            Notifier.Alert(DbErrorMessage);
         }
     }
 
@@ -146,22 +121,5 @@ public sealed class Client : BaseSearch<Model.Client>
             MiddleName = MiddleName,
             Phone = PhoneNumber,
         };
-        
-        try
-        {
-            var insertedClient = await Context.Clients.AddAsync(client);
-            await Context.SaveChangesAsync();
-
-            if (insertedClient.IsKeySet)
-                Clients.Add(insertedClient.Entity);
-            else
-                Clients = new ObservableCollection<Model.Client>(Context.Clients);
-            
-            Notifier.Alert(AddSuccessMessage);
-        }
-        catch
-        {
-            Notifier.Alert(DbErrorMessage);
-        }
     }
 }

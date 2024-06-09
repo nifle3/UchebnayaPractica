@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using WpfApp1.ViewModel.Utils;
 
-namespace WpfApp1.ViewModel.Login;
+namespace WpfApp1.ViewModel;
 
 public class Login : BaseAlert
 {

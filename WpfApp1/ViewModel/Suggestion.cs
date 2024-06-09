@@ -1,21 +1,22 @@
 ﻿using System.Collections.ObjectModel;
+using WpfApp1.Model;
 using WpfApp1.ViewModel.Utils;
 
-namespace WpfApp1.ViewModel.Suggestion;
+namespace WpfApp1.ViewModel;
 
-public sealed class Suggestion : BaseCrud<Model.Suggestion>
+public sealed class SuggestionViewModel : BaseCrud<Suggestion>
 {
     private Model.Client _selectedClient = null!;
     private Model.Estate _selectedEstate = null!;
     private Model.Realtor _selectedRealtor = null!;
     private decimal _price;
     
-    public Suggestion(IAlert alert) : base(alert) =>
+    public SuggestionViewModel(IAlert alert, ICrudService<Suggestion> service) : base(alert) =>
         (Suggestions, Clients, Estates, Realtors) 
-            = (new ObservableCollection<Model.Suggestion>(Context.Suggestions), Context.Clients.ToList(), 
+            = (new ObservableCollection<Suggestion>(Context.Suggestions), Context.Clients.ToList(), 
                 Context.Estates.ToList(), Context.Realtors.ToList());
 
-    public ObservableCollection<Model.Suggestion> Suggestions { private set; get; }
+    public ObservableCollection<Suggestion> Suggestions { private set; get; }
 
     public List<Model.Client> Clients { private set; get; }
     
@@ -49,64 +50,22 @@ public sealed class Suggestion : BaseCrud<Model.Suggestion>
 
     protected override async Task Add()
     {
-        var suggestion = new Model.Suggestion()
+        var suggestion = new Suggestion()
         {
             ClientNavigation = SelectedClient,
             EstateNavigation = SelectedEstate,
             Price = Price,
             RealtorNavigation = SelectedRealtor,
         };
-
-        try
-        {
-            var sug = await Context.Suggestions.AddAsync(suggestion);
-            await Context.SaveChangesAsync();
-
-            if (sug.IsKeySet)
-                Suggestions.Add(sug.Entity);
-            else
-                Suggestions = new ObservableCollection<Model.Suggestion>(Context.Suggestions);
-            
-            Notifier.Alert(AddSuccessMessage);
-        }
-        catch
-        {
-            Notifier.Alert(DbErrorMessage);
-        }
     }
 
     protected override async Task Delete(Model.Suggestion? entity)
     {
         if (entity is null) return;
-        
-        try
-        {
-            Context.Suggestions.Remove(entity);
-            await Context.SaveChangesAsync();
-            Suggestions.Remove(entity);
-            
-            Notifier.Alert(DeleteSuccessMessage);
-        }
-        catch
-        {
-            Notifier.Alert(DbErrorMessage);
-        }
     }
 
     protected override async Task Update(Model.Suggestion? entity)
     {
         if (entity is null) return;
-
-        try
-        {
-            Context.Suggestions.Update(entity);
-            await Context.SaveChangesAsync();
-            
-            Notifier.Alert(UpdateSuccessMessage);
-        }
-        catch
-        {
-            Notifier.Alert(DbErrorMessage);
-        }
     }
 }

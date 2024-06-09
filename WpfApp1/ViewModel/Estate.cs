@@ -1,10 +1,10 @@
 ﻿using WpfApp1.ViewModel.Utils;
 
-namespace WpfApp1.ViewModel.Estate;
+namespace WpfApp1.ViewModel;
 
 public abstract class Estate : BaseDb
 {
-    public Estate(IAlert alert) : base(alert)
+    protected Estate(IAlert alert) : base(alert)
     {
     }
 }
