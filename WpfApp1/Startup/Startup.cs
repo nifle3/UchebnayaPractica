@@ -17,8 +17,8 @@ public class Startup
 
     public static Startup Instance =>
         Lazy.Value;
-    
-    public IContainer DiContainer { private set; get; }
+
+    public IContainer DiContainer { private set; get; } = null!;
 
     public void SettingDiContainer()
     {
@@ -27,6 +27,10 @@ public class Startup
         builder.RegisterType<ClientViewModel>().AsSelf();
         builder.RegisterType<CrudService<Client>>().As<ICrudService<Client>>();
         builder.RegisterType<ClientService>().As<IClientService>();
+
+        builder.RegisterType<RealtorViewModel>().AsSelf();
+        builder.RegisterType<CrudService<Realtor>>().As<ICrudService<Realtor>>();
+        builder.RegisterType<RealtorService>().As<IRealtorService>();
 
         DiContainer = builder.Build();
     }

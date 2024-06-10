@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:WpfApp1.View"
         mc:Ignorable="d"
-        Title="Глваная" Height="450" Width="800" MinHeight="300" MinWidth="500">
+        Title="Глваная" Height="600" Width="800" MinHeight="300" MinWidth="500">
         <Grid>
                 <Grid.RowDefinitions>
                         <RowDefinition Height="0.2*"/>
@@ -19,7 +19,7 @@
                         </Grid.ColumnDefinitions>
                         <UniformGrid Grid.Column="0" Columns="6" Margin="0 0 10 0">
                                 <Button Click="ClientClick">Клиенты</Button>
-                                <Button Click="RealtorClick">Риэлторы </Button>
+                                <Button Click="RealtorClick">Риэлторы</Button>
                                 <Button Click="DealClick">Сделки</Button>
                                 <Button Click="NeedClick">Потребности</Button>
                                 <Button Click="SuggestionClick">Предложения</Button>

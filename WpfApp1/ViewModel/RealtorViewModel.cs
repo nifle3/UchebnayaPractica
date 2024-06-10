@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Messaging;
+using WpfApp1.Message;
 using WpfApp1.Model;
 using WpfApp1.ViewModel.Service;
 
@@ -8,7 +9,8 @@ namespace WpfApp1.ViewModel;
 public sealed class RealtorViewModel : BaseSearch<Realtor>
 {
     private readonly IRealtorService _service;
-    
+
+    private Realtor? _selectedRealtor;
     private string _name = "";
     private string _lastName = "";
     private string _middleName = "";
@@ -27,6 +29,12 @@ public sealed class RealtorViewModel : BaseSearch<Realtor>
         AddEvent += Add;
 
         Realtors = _service.GetAll();
+    }
+
+    public Realtor? SelectedRealtor
+    {
+        set => SetProperty(ref _selectedRealtor, value);
+        get => _selectedRealtor;
     }
     
     public ObservableCollection<Realtor> Realtors { private set; get; }
@@ -73,53 +81,45 @@ public sealed class RealtorViewModel : BaseSearch<Realtor>
         get => _searchLastName; 
     }
 
-    protected override async Task Search()
+    protected override async Task Search() =>
+        Realtors = await _service.GetSearch(SearchName, SearchLastName, SearchMiddleName);
+
+    protected override void Refresh()
     {
-        var task = Task.Run(() =>
-        {
-            const int minLevenstein = 3;
-            IQueryable<Realtor> query = _service.GetForSearch();
-        
+        SearchName = "";
+        SearchLastName = "";
+        SearchMiddleName = "";
 
-            if (!string.IsNullOrWhiteSpace(SearchName))
-                query = query
-                    .Where(q => RealtorsStoreContext.LevenshteinDistance(q.FirstName, SearchName) <= minLevenstein);
-
-            if (!string.IsNullOrWhiteSpace(SearchLastName))
-                query = query
-                    .Where(q => RealtorsStoreContext.LevenshteinDistance(q.LastName, SearchLastName) <= minLevenstein);
-
-            if (!string.IsNullOrWhiteSpace(SearchMiddleName))
-                query = query.Where(q =>
-                    RealtorsStoreContext.LevenshteinDistance(q.MiddleName, SearchMiddleName) <= minLevenstein);
-        
-            Realtors = new ObservableCollection<Realtor>(query);
-        });
-        
-        await task;     
+        Realtors = _service.GetAll();
     }
-    
+
     protected override Realtor GetEntity() =>
-        new Realtor()
+        new()
         {
-            Comission = Commision,
+            Comission = Commision == -1 ? null : Commision,
             FirstName = Name,
             LastName = LastName,
             MiddleName = MiddleName,
         };
 
-    private void Add(Realtor entity) =>
-        Realtors.Add(entity);
+    private void Add(Realtor realtor) =>
+        Realtors.Add(realtor);
     
-    private void Delete(Realtor entity) =>
-        Realtors.Remove(entity);
+    private void Delete(Realtor realtor) =>
+        Realtors.Remove(realtor);
 
-    private bool CanModify(Realtor entity)
+    private static bool CanModify(Realtor realtor)
     {
-        if (!string.IsNullOrWhiteSpace(entity.FirstName) && !string.IsNullOrWhiteSpace(entity.MiddleName) &&
-            !string.IsNullOrWhiteSpace(entity.LastName)) return true;
+        if (realtor.Comission is > 100 or < -1)
+        {
+            WeakReferenceMessenger.Default.Send(new AlertMessage("Коммиссия может быть от -1(будет null) до 100", ErrorCaptionsMessage));
+            return false;
+        }
         
-        WeakReferenceMessenger.Default.Send("Фамилия, имя и отчество должны быть заполнены");
+        if (!string.IsNullOrWhiteSpace(realtor.FirstName) && !string.IsNullOrWhiteSpace(realtor.MiddleName) &&
+            !string.IsNullOrWhiteSpace(realtor.LastName)) return true;
+        
+        WeakReferenceMessenger.Default.Send(new AlertMessage("Фамилия, имя и отчество должны быть заполнены", ErrorCaptionsMessage));
         return false;
     }
 }

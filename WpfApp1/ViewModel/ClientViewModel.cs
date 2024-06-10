@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.Messaging;
+using WpfApp1.Message;
 using WpfApp1.Model;
-using WpfApp1.ViewModel.Message;
 using WpfApp1.ViewModel.Service;
 
 namespace WpfApp1.ViewModel;
@@ -90,35 +90,19 @@ public sealed class ClientViewModel : BaseSearch<Client>
 
     public ObservableCollection<Client> Clients { private set; get; }
 
-    protected override async Task Search()
+    protected override async Task Search() =>
+        Clients = await _service.GetSearch(SearchName, SearchLastName, 
+            SearchMiddleName);
+
+    protected override void Refresh()
     {
-        var task = Task.Run(() =>
-        {
-            const int minLevenstein = 3;
-            IQueryable<Client> query = _service.GetForSearch();
+        SearchName = "";
+        SearchLastName = "";
+        SearchMiddleName = "";
 
-
-            if (!string.IsNullOrWhiteSpace(SearchName))
-                query = query
-                    .Where(q => q.FirstName != null &&
-                                RealtorsStoreContext.LevenshteinDistance(q.FirstName, SearchName) <= minLevenstein);
-
-            if (!string.IsNullOrWhiteSpace(SearchLastName))
-                query = query
-                    .Where(q => q.LastName != null &&
-                                RealtorsStoreContext.LevenshteinDistance(q.LastName, SearchLastName) <= minLevenstein);
-
-            if (!string.IsNullOrWhiteSpace(SearchMiddleName))
-                query = query.Where(q =>
-                    q.MiddleName != null && RealtorsStoreContext.LevenshteinDistance(q.MiddleName, SearchMiddleName) <=
-                    minLevenstein);
-
-            //Clients = new ObservableCollection<Client>(query);
-        });
-
-        await task;
+        Clients = _service.GetAll();
     }
-
+    
     protected override Client GetEntity() =>
         new Client()
         {
@@ -164,8 +148,8 @@ public sealed class ClientViewModel : BaseSearch<Client>
         if (!validPhone && !validEmail)
         {
             WeakReferenceMessenger.Default.Send(new AlertMessage("Вы ввели не телефон и не почту",  ErrorCaptionsMessage));
+            return false;
         }
-        
         
         return true;
     } 

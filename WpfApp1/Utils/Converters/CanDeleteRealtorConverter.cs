@@ -4,14 +4,14 @@ using WpfApp1.Model;
 
 namespace WpfApp1.Utils.Converters;
 
-public sealed class CanDeleteClientConverter : IValueConverter
+public sealed class CanDeleteRealtorConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is not Client client)
+        if (value is not Realtor realtor)
             return false;
-
-        return !client.Suggestions.Any() && !client.Needs.Any();
+        
+        return !realtor.Suggestions.Any() && !realtor.Needs.Any();
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

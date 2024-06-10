@@ -1,0 +1,75 @@
+﻿<Page x:Class="WpfApp1.View.Pages.RealtorPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:converter="clr-namespace:WpfApp1.Utils.Converters"
+      xmlns:local="clr-namespace:WpfApp1.View.Pages"
+      mc:Ignorable="d"
+      Title="Realtor"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Stretch">
+    <Page.Resources>
+        <converter:CanDeleteClientConverter x:Key="Converter"/>
+    </Page.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.65*"/>
+            <ColumnDefinition Width="0.35*"/>
+        </Grid.ColumnDefinitions>
+        
+        <DataGrid ItemsSource="{Binding Realtors}" x:Name="DataGrid" SelectedItem="{Binding SelectedRealtor}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}"/>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}"/>
+                <DataGridTextColumn Header="Отчество" Binding="{Binding MiddleName}"/>
+                <DataGridTextColumn Header="Комиссия" Binding="{Binding Comission}"/>
+            </DataGrid.Columns>>
+        </DataGrid>
+        
+        <StackPanel Grid.Column="1">
+            <UniformGrid Columns="2">
+                <Button Command="{Binding DeleteCommand}" CommandParameter="{Binding SelectedRealtor}"
+                        IsEnabled="{Binding SelectedRealtor, Converter={StaticResource Converter}}">
+                    Удалить
+                </Button>
+                <Button Command="{Binding UpdateCommand}" CommandParameter="{Binding SelectedRealtor}">
+                    Обновить
+                </Button>
+            </UniformGrid>
+            
+            <Label>_Имя</Label>
+            <TextBox Text="{Binding Name}"/>
+            
+            <Label>_Фамилия</Label>
+            <TextBox Text="{Binding MiddleName}"/>
+            
+            <Label>_Отчество</Label>
+            <TextBox Text="{Binding LastName}"></TextBox>
+            
+            <Label>Комиссия</Label>
+            <TextBox Text="{Binding Commision}"/>
+           
+            <Button Command="{Binding AddCommand}">Добавить</Button>
+            
+            <TextBlock>Поиск:</TextBlock>
+            <Label>_Имя</Label>
+            <TextBox Text="{Binding SearchName}"/>
+            
+            <Label>_Фамилия</Label>
+            <TextBox Text="{Binding SearchMiddleName}"/>
+            
+            <Label>_Отчество</Label>
+            <TextBox Text="{Binding SearchLastName}"></TextBox>
+            
+            <Button Command="{Binding SearchCommand}">Поиск</Button>
+            
+            <Button Command="{Binding DeleteCommand}">
+                Сбросить
+            </Button>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using CommunityToolkit.Mvvm.Messaging;
+using WpfApp1.Message;
 using WpfApp1.ViewModel;
-using WpfApp1.ViewModel.Message;
 
 namespace WpfApp1.View;
 

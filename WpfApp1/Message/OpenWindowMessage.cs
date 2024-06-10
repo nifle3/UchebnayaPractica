@@ -1,4 +1,4 @@
-﻿namespace WpfApp1.ViewModel.Message;
+﻿namespace WpfApp1.Message;
 
 public sealed class OpenWindowMessage
 {

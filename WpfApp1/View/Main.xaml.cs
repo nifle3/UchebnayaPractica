@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using CommunityToolkit.Mvvm.Messaging;
+using WpfApp1.Message;
 using WpfApp1.View.Pages;
-using WpfApp1.ViewModel.Message;
 using MessageBox = System.Windows.MessageBox;
 
 namespace WpfApp1.View;
@@ -15,6 +15,11 @@ public partial class Main : Window
         WeakReferenceMessenger.Default.Register<AlertMessage>(this, (_, msg) =>
         {
             MessageBox.Show(msg.Text, msg.Captions);
+        });
+        
+        WeakReferenceMessenger.Default.Register<RenameWindowMessage>(this, (_, msg) =>
+        {
+            this.Title = msg.Name;
         });
     }
 
@@ -38,7 +43,8 @@ public partial class Main : Window
 
     private void RealtorClick(object sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        Frame.RemoveBackEntry();
+        Frame.Navigate(new RealtorPage());
     }
 
     private void NeedClick(object sender, RoutedEventArgs e)
