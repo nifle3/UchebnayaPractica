@@ -10,12 +10,12 @@ public abstract class BaseCrud<T> : Base
 {
     private readonly ICrudService<T> _crudService;
 
-    protected const string DbErrorMessage = "Ошибка в базе данных";
+    private const string DbErrorMessage = "Ошибка в базе данных";
     private const string UpdateSuccessMessage = "Запись успешно обновлена!";
     private const string AddSuccessMessage = "Запись успешно добавлена!";
     private const string DeleteSuccessMessage = "Запись успешно добавлена!";
 
-    protected event Predicate<T>? CanUpdateEvent;
+    protected event Predicate<T>? CanModifyEvent;
     protected event Action<T>? DeleteEvent;
     protected event Action<T>? AddEvent;
 
@@ -39,6 +39,9 @@ public abstract class BaseCrud<T> : Base
     private async Task Add()
     {
         var result = GetEntity();
+        
+        var isOk = CanModifyEvent?.Invoke(result);
+        if (isOk.HasValue && !isOk.Value) return;
         
         var entity = await _crudService.AddAsync(result);
         if (entity is null)
@@ -70,7 +73,7 @@ public abstract class BaseCrud<T> : Base
     {
         if (entity is null) return;
         
-        var isOk = CanUpdateEvent?.Invoke(entity);
+        var isOk = CanModifyEvent?.Invoke(entity);
         if (isOk.HasValue && !isOk.Value) return;
 
         var result = await _crudService.UpdateAsync(entity);

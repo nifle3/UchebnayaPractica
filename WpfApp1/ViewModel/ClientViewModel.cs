@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.Messaging;
 using WpfApp1.Model;
 using WpfApp1.ViewModel.Message;
@@ -26,7 +27,7 @@ public sealed class ClientViewModel : BaseSearch<Client>
     {
         _service = service;
 
-        CanUpdateEvent += CanUpdate;
+        CanModifyEvent += CanModify;
         DeleteEvent += Delete;
         AddEvent += Add;
 
@@ -62,7 +63,7 @@ public sealed class ClientViewModel : BaseSearch<Client>
         set => SetProperty(ref _phoneNumber, value);
         get => _phoneNumber;
     }
-
+    
     public string Email
     {
         set => SetProperty(ref _email, value);
@@ -89,8 +90,6 @@ public sealed class ClientViewModel : BaseSearch<Client>
 
     public ObservableCollection<Client> Clients { private set; get; }
 
-    
-    
     protected override async Task Search()
     {
         var task = Task.Run(() =>
@@ -136,11 +135,38 @@ public sealed class ClientViewModel : BaseSearch<Client>
     private void Delete(Client client) =>
         Clients.Remove(client);
 
-    private bool CanUpdate(Client client)
+    private static bool CanModify(Client client)
     {
-        if (!string.IsNullOrEmpty(client.Phone) || !string.IsNullOrEmpty(client.Email)) return true;
+        var emptyPhone = string.IsNullOrEmpty(client.Phone);
+        var emptyEmail = string.IsNullOrEmpty(client.Email); 
         
-        WeakReferenceMessenger.Default.Send(new AlertMessage("Телефон или почты должны быть заполнены", ErrorCaptionsMessage));
-        return false;
+        if (emptyEmail && emptyPhone)
+        {
+            WeakReferenceMessenger.Default.Send(new AlertMessage("Телефон или почты должны быть заполнены", ErrorCaptionsMessage));
+            return true;
+        }
+
+        var validEmail = Regex.IsMatch(client.Email ?? "", "^\\S+@\\S+\\.\\S+$");
+        var validPhone = Regex.IsMatch(client.Phone ?? "", "^\\+?[1-9][0-9]{7,14}$");
+
+        if (!validEmail && emptyPhone)
+        {
+            WeakReferenceMessenger.Default.Send(new AlertMessage("Вы ввели не почту", ErrorCaptionsMessage));
+            return false;
+        }
+
+        if (!validPhone && emptyEmail)
+        {
+            WeakReferenceMessenger.Default.Send(new AlertMessage("Вы ввели не телефон", ErrorCaptionsMessage));
+            return false;
+        }
+
+        if (!validPhone && !validEmail)
+        {
+            WeakReferenceMessenger.Default.Send(new AlertMessage("Вы ввели не телефон и не почту",  ErrorCaptionsMessage));
+        }
+        
+        
+        return true;
     } 
 }

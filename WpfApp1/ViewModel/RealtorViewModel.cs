@@ -22,7 +22,7 @@ public sealed class RealtorViewModel : BaseSearch<Realtor>
     {
         _service = service;
 
-        CanUpdateEvent += CanUpdate;
+        CanModifyEvent += CanModify;
         DeleteEvent += Delete;
         AddEvent += Add;
 
@@ -33,43 +33,43 @@ public sealed class RealtorViewModel : BaseSearch<Realtor>
 
     public string Name
     {
-        set => SetField(ref _name, value);
+        set => SetProperty(ref _name, value);
         get => _name;
     }
 
     public string LastName
     {
-        set => SetField(ref _lastName, value);
+        set => SetProperty(ref _lastName, value);
         get => _lastName;
     }
 
     public string MiddleName
     {
-        set => SetField(ref _middleName, value);
+        set => SetProperty(ref _middleName, value);
         get => _middleName;
     }
 
     public int Commision
     {
-        set => SetField(ref _commision, value);
+        set => SetProperty(ref _commision, value);
         get => _commision;
     }
 
     public string SearchName
     {
-        set => SetField(ref _searchName, value);
+        set => SetProperty(ref _searchName, value);
         get => _searchName;
     }
     
     public string SearchMiddleName
     {
-        set => SetField(ref _searchMiddleName, value);
+        set => SetProperty(ref _searchMiddleName, value);
         get => _searchMiddleName;
     }
 
     public string SearchLastName
     {
-        set => SetField(ref _searchLastName, value);
+        set => SetProperty(ref _searchLastName, value);
         get => _searchLastName; 
     }
 
@@ -114,7 +114,7 @@ public sealed class RealtorViewModel : BaseSearch<Realtor>
     private void Delete(Realtor entity) =>
         Realtors.Remove(entity);
 
-    private bool CanUpdate(Realtor entity)
+    private bool CanModify(Realtor entity)
     {
         if (!string.IsNullOrWhiteSpace(entity.FirstName) && !string.IsNullOrWhiteSpace(entity.MiddleName) &&
             !string.IsNullOrWhiteSpace(entity.LastName)) return true;

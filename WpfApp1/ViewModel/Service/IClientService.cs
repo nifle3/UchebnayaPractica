@@ -9,4 +9,5 @@ public interface IClientService
     public ObservableCollection<Client> GetAll();
 
     public DbSet<Client> GetForSearch();
+
 }

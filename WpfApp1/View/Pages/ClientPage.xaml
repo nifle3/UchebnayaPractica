@@ -40,14 +40,19 @@
                     Обновить
                 </Button>
             </UniformGrid>
+            
             <Label>_Имя</Label>
             <TextBox Text="{Binding Name}"/>
+            
             <Label>_Фамилия</Label>
             <TextBox Text="{Binding MiddleName}"/>
+            
             <Label>_Отчество</Label>
             <TextBox Text="{Binding LastName}"></TextBox>
+            
             <Label>_Телефон</Label>
             <TextBox Text="{Binding PhoneNumber}"/>
+           
             <Label>_Почта</Label>
             <TextBox Text="{Binding Email}"/>
             <Button Command="{Binding AddCommand}">Добавить</Button>
