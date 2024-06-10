@@ -10,6 +10,7 @@ public sealed class RealtorViewModel : BaseSearch<Realtor>
 {
     private readonly IRealtorService _service;
 
+    private ObservableCollection<Realtor> _realtors;
     private Realtor? _selectedRealtor;
     private string _name = "";
     private string _lastName = "";
@@ -36,8 +37,12 @@ public sealed class RealtorViewModel : BaseSearch<Realtor>
         set => SetProperty(ref _selectedRealtor, value);
         get => _selectedRealtor;
     }
-    
-    public ObservableCollection<Realtor> Realtors { private set; get; }
+
+    public ObservableCollection<Realtor> Realtors
+    {
+        private set => SetProperty(ref _realtors, value); 
+        get => _realtors;
+    }
 
     public string Name
     {
@@ -81,8 +86,8 @@ public sealed class RealtorViewModel : BaseSearch<Realtor>
         get => _searchLastName; 
     }
 
-    protected override async Task Search() =>
-        Realtors = await _service.GetSearch(SearchName, SearchLastName, SearchMiddleName);
+    protected override void Search() => 
+        Realtors = _service.GetSearch(SearchName, SearchLastName, SearchMiddleName);
 
     protected override void Refresh()
     {

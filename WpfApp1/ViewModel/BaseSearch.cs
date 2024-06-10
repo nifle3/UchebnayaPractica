@@ -8,7 +8,7 @@ public abstract class BaseSearch<T> : BaseCrud<T>
 {
     protected BaseSearch(ICrudService<T> crudService) : base(crudService)
     {
-        SearchCommand = new AsyncRelayCommand(Search);
+        SearchCommand = new RelayCommand(Search);
         RefreshCommand = new RelayCommand(Refresh);
     }
     
@@ -16,7 +16,7 @@ public abstract class BaseSearch<T> : BaseCrud<T>
 
     public ICommand RefreshCommand { private set; get; }
     
-    protected abstract Task Search();
+    protected abstract void Search();
     
     protected abstract void Refresh();
 }

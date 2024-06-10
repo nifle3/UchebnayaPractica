@@ -12,6 +12,7 @@ public sealed class ClientViewModel : BaseSearch<Client>
     private readonly IClientService _service;
 
     private Client? _selectedClient;
+    private ObservableCollection<Client> _clients;
     
     private string _name = "";
     private string _lastName = "";
@@ -88,10 +89,14 @@ public sealed class ClientViewModel : BaseSearch<Client>
         get => _searchLastName;
     }
 
-    public ObservableCollection<Client> Clients { private set; get; }
+    public ObservableCollection<Client> Clients
+    {
+        private set => SetProperty(ref _clients, value);
+        get => _clients;
+    }
 
-    protected override async Task Search() =>
-        Clients = await _service.GetSearch(SearchName, SearchLastName, 
+    protected override void Search() =>
+        Clients =  _service.GetSearch(SearchName, SearchLastName, 
             SearchMiddleName);
 
     protected override void Refresh()

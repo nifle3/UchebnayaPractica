@@ -67,7 +67,7 @@
             
             <Button Command="{Binding SearchCommand}">Поиск</Button>
             
-            <Button Command="{Binding DeleteCommand}">
+            <Button Command="{Binding RefreshCommand}">
                 Сбросить
             </Button>
         </StackPanel>

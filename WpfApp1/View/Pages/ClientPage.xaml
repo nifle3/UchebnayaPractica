@@ -56,6 +56,22 @@
             <Label>_Почта</Label>
             <TextBox Text="{Binding Email}"/>
             <Button Command="{Binding AddCommand}">Добавить</Button>
+            
+            <TextBlock>Поиск:</TextBlock>
+            <Label>_Имя</Label>
+            <TextBox Text="{Binding SearchName}"/>
+            
+            <Label>_Фамилия</Label>
+            <TextBox Text="{Binding SearchMiddleName}"/>
+            
+            <Label>_Отчество</Label>
+            <TextBox Text="{Binding SearchLastName}"></TextBox>
+            
+            <Button Command="{Binding SearchCommand}">Поиск</Button>
+            
+            <Button Command="{Binding RefreshCommand}">
+                Сбросить
+            </Button>
         </StackPanel>
     </Grid>
 </Page>

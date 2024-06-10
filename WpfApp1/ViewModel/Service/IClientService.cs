@@ -7,6 +7,6 @@ public interface IClientService
 {
     public ObservableCollection<Client> GetAll();
 
-    public Task<ObservableCollection<Client>> GetSearch(string name, string lastName, string middleName);
+    public ObservableCollection<Client> GetSearch(string name, string lastName, string middleName);
 
 }

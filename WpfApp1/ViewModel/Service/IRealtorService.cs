@@ -8,5 +8,5 @@ public interface IRealtorService
 {
     public ObservableCollection<Realtor> GetAll();
 
-    public Task<ObservableCollection<Realtor>> GetSearch(string name, string lastName, string middleName);
+    public ObservableCollection<Realtor> GetSearch(string name, string lastName, string middleName);
 }
