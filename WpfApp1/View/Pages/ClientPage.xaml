@@ -5,15 +5,28 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:WpfApp1.View.Pages"
       mc:Ignorable="d"
-      Title="ClientPage" Height="450" Width="800">
-    <Grid>
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Stretch">
+        <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.65*"/>
             <ColumnDefinition Width="0.35*"/>
         </Grid.ColumnDefinitions>
         
-        <DataGrid ItemsSource="{Binding Clients}" AutoGenerateColumns="False">
+        <DataGrid ItemsSource="{Binding Clients}" AutoGenerateColumns="False" x:Name="DataGrid">
             <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Удалить">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button 
+                                Command="{Binding DeleteCommand, 
+                                RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                CommandParameter="">
+                                Удалить
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}"/>
                 <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}"/>

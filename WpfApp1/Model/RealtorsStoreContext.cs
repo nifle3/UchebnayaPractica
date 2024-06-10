@@ -80,24 +80,7 @@ public partial class RealtorsStoreContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("street");
         });
-
-        modelBuilder.Entity<ApartmentsNeed>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Apartmen__3213E83F3EE06612");
-
-            entity.ToTable("ApartmentsNeed");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.MaxFloor).HasColumnName("max_floor");
-            entity.Property(e => e.MaxRoomsCount).HasColumnName("max_rooms_count");
-            entity.Property(e => e.MaxSquare).HasColumnName("max_square");
-            entity.Property(e => e.MinFloor).HasColumnName("min_floor");
-            entity.Property(e => e.MinRoomsCount).HasColumnName("min_rooms_count");
-            entity.Property(e => e.MinSquare).HasColumnName("min_square");
-        });
-
+        
         modelBuilder.Entity<Client>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Client__3213E83F4B158436");
@@ -161,8 +144,6 @@ public partial class RealtorsStoreContext : DbContext
 
         modelBuilder.Entity<EstateApartment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__EstateAp__3213E83F9DCBE136");
-
             entity.ToTable("EstateApartment");
 
             entity.Property(e => e.Id)
@@ -175,8 +156,6 @@ public partial class RealtorsStoreContext : DbContext
 
         modelBuilder.Entity<EstateHouse>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__EstateHo__3213E83FC39D851C");
-
             entity.ToTable("EstateHouse");
 
             entity.Property(e => e.Id)
@@ -189,44 +168,12 @@ public partial class RealtorsStoreContext : DbContext
 
         modelBuilder.Entity<EstateLand>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__EstateLa__3213E83F8BB7BFEA");
-
             entity.ToTable("EstateLand");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Square).HasColumnName("square");
-        });
-
-        modelBuilder.Entity<HouseNeed>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__HouseNee__3213E83F035B066B");
-
-            entity.ToTable("HouseNeed");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.MaxFloorsCount).HasColumnName("max_floors_count");
-            entity.Property(e => e.MaxRoomsCount).HasColumnName("max_rooms_count");
-            entity.Property(e => e.MaxSquare).HasColumnName("max_square");
-            entity.Property(e => e.MinFloorsCount).HasColumnName("min_floors_count");
-            entity.Property(e => e.MinRoomsCount).HasColumnName("min_rooms_count");
-            entity.Property(e => e.MinSquare).HasColumnName("min_square");
-        });
-
-        modelBuilder.Entity<LandsNeed>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__LandsNee__3213E83F87BE842E");
-
-            entity.ToTable("LandsNeed");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.MaxSquare).HasColumnName("max_square");
-            entity.Property(e => e.MinSquare).HasColumnName("min_square");
         });
 
         modelBuilder.Entity<Need>(entity =>
@@ -264,6 +211,48 @@ public partial class RealtorsStoreContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("NeedRealtorFK");
         });
+        
+        modelBuilder.Entity<HouseNeed>(entity =>
+        {
+            entity.ToTable("HouseNeed");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.MaxFloorsCount).HasColumnName("max_floors_count");
+            entity.Property(e => e.MaxRoomsCount).HasColumnName("max_rooms_count");
+            entity.Property(e => e.MaxSquare).HasColumnName("max_square");
+            entity.Property(e => e.MinFloorsCount).HasColumnName("min_floors_count");
+            entity.Property(e => e.MinRoomsCount).HasColumnName("min_rooms_count");
+            entity.Property(e => e.MinSquare).HasColumnName("min_square");
+        });
+
+        modelBuilder.Entity<LandsNeed>(entity =>
+        {
+            entity.ToTable("LandsNeed");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.MaxSquare).HasColumnName("max_square");
+            entity.Property(e => e.MinSquare).HasColumnName("min_square");
+        });
+        
+        modelBuilder.Entity<ApartmentsNeed>(entity =>
+        {
+            entity.ToTable("ApartmentsNeed");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.MaxFloor).HasColumnName("max_floor");
+            entity.Property(e => e.MaxRoomsCount).HasColumnName("max_rooms_count");
+            entity.Property(e => e.MaxSquare).HasColumnName("max_square");
+            entity.Property(e => e.MinFloor).HasColumnName("min_floor");
+            entity.Property(e => e.MinRoomsCount).HasColumnName("min_rooms_count");
+            entity.Property(e => e.MinSquare).HasColumnName("min_square");
+        });
+
 
         modelBuilder.Entity<Realtor>(entity =>
         {

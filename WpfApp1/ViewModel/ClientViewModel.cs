@@ -104,7 +104,7 @@ public sealed class ClientViewModel : BaseSearch<Client>
                     q.MiddleName != null && RealtorsStoreContext.LevenshteinDistance(q.MiddleName, SearchMiddleName) <=
                     minLevenstein);
 
-            Clients = new ObservableCollection<Client>(query);
+            //Clients = new ObservableCollection<Client>(query);
         });
 
         await task;

@@ -25,7 +25,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Utils\" />
+      <None Remove="Resources\logo.png" />
+      <Resource Include="Resources\logo.png" />
     </ItemGroup>
 
 </Project>

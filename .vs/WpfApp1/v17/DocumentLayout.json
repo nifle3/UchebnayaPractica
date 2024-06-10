@@ -1,7 +1,11 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\study2\\UP\\WpfApp1\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Nifie\\AppData\\Local\\Temp\\.vsdbgsrc\\94e1ca33c1bd5814a477ad930d9e005b10878e93151475e7b5ee0d82f0a33595\\ItemCollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +13,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,6 +42,17 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ItemCollection.cs",
+              "DocumentMoniker": "C:\\Users\\Nifie\\AppData\\Local\\Temp\\.vsdbgsrc\\94e1ca33c1bd5814a477ad930d9e005b10878e93151475e7b5ee0d82f0a33595\\ItemCollection.cs",
+              "ToolTip": "C:\\Users\\Nifie\\AppData\\Local\\Temp\\.vsdbgsrc\\94e1ca33c1bd5814a477ad930d9e005b10878e93151475e7b5ee0d82f0a33595\\ItemCollection.cs [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]",
+              "ViewState": "AQIAALYGAADQzMzMzIwhwLYGAAADAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T14:26:48.92Z",
+              "EditorCaption": " [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]"
             }
           ]
         },

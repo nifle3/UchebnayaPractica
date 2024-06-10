@@ -1,4 +1,6 @@
 ﻿using System.Windows.Controls;
+using Autofac;
+using WpfApp1.ViewModel;
 
 namespace WpfApp1.View.Pages;
 
@@ -8,6 +10,9 @@ public partial class ClientPage : Page
     {
         InitializeComponent();
 
-        DataContext = null;
+        var startup = Startup.Startup.Instance;
+        
+        DataGrid.Items.Clear();
+        DataContext = startup.DiContainer.Resolve<ClientViewModel>();
     }
 }
