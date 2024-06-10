@@ -30,8 +30,7 @@ public partial class Login : Window
 
     protected override void OnClosed(EventArgs e)
     {
-        WeakReferenceMessenger.Default.Unregister<AlertMessage>(this);
-        WeakReferenceMessenger.Default.Unregister<OpenWindowMessage>(this);
+        WeakReferenceMessenger.Default.UnregisterAll(this);
         
         base.OnClosed(e);
     }

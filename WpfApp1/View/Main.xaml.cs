@@ -1,5 +1,8 @@
 ﻿using System.Windows;
+using CommunityToolkit.Mvvm.Messaging;
 using WpfApp1.View.Pages;
+using WpfApp1.ViewModel.Message;
+using MessageBox = System.Windows.MessageBox;
 
 namespace WpfApp1.View;
 
@@ -8,6 +11,18 @@ public partial class Main : Window
     public Main()
     {
         InitializeComponent();
+        
+        WeakReferenceMessenger.Default.Register<AlertMessage>(this, (_, msg) =>
+        {
+            MessageBox.Show(msg.Text, msg.Captions);
+        });
+    }
+
+    protected override void OnClosed(EventArgs e)
+    {
+        WeakReferenceMessenger.Default.UnregisterAll(this);
+        
+        base.OnClosed(e);
     }
 
     private void ClientClick(object sender, RoutedEventArgs e)
