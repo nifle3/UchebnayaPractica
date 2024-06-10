@@ -9,6 +9,8 @@ namespace WpfApp1.ViewModel;
 public sealed class ClientViewModel : BaseSearch<Client>
 {
     private readonly IClientService _service;
+
+    private Client? _selectedClient;
     
     private string _name = "";
     private string _lastName = "";
@@ -29,6 +31,12 @@ public sealed class ClientViewModel : BaseSearch<Client>
         AddEvent += Add;
 
         Clients = _service.GetAll();
+    }
+
+    public Client? SelectedClient
+    {
+        set => SetField(ref _selectedClient, value);
+        get => _selectedClient;
     }
     
     public string Name
