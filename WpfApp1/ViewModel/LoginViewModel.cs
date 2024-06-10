@@ -19,13 +19,13 @@ public class LoginViewModel : Base
     
     public string Email
     {
-        set => SetField(ref _email, value);
+        set => SetProperty(ref _email, value);
         get => _email;
     }
 
     public string Password
     {
-        set => SetField(ref _password, value);
+        set => SetProperty(ref _password, value);
         get => _password;
     }
     

@@ -18,37 +18,37 @@ public sealed class HouseNeedViewModelViewModel : NeedViewModel<HouseNeed>
 
     public double MinSquare
     {
-        set => SetField(ref _minSquare, value);
+        set => SetProperty(ref _minSquare, value);
         get => _minSquare;
     }
 
     public double MaxSquare
     {
-        set => SetField(ref _maxSquare, value);
+        set => SetProperty(ref _maxSquare, value);
         get => _maxSquare;
     }
 
     public int MinRoomsCount
     {
-        set => SetField(ref _minRoomsCount, value);
+        set => SetProperty(ref _minRoomsCount, value);
         get => _minRoomsCount;
     }
 
     public int MaxRoomsCount
     {
-        set => SetField(ref _maxRoomsCount, value);
+        set => SetProperty(ref _maxRoomsCount, value);
         get => _maxRoomsCount;
     }
 
     public int MinFloorsCount
     {
-        set => SetField(ref _minFloorsCount, value);
+        set => SetProperty(ref _minFloorsCount, value);
         get => _minFloorsCount;
     }
 
     public int MaxFloorsCount
     {
-        set => SetField(ref _maxFloorsCount, value);
+        set => SetProperty(ref _maxFloorsCount, value);
         get => _maxFloorsCount;
     }
 

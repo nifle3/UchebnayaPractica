@@ -36,25 +36,25 @@ public sealed class SuggestionViewModel : BaseCrud<Suggestion>
     
     public Client SelectedClient
     {
-        set => SetField(ref _selectedClient, value);
+        set => SetProperty(ref _selectedClient, value);
         get => _selectedClient;
     }
 
     public Estate SelectedEstate
     {
-        set => SetField(ref _selectedEstate, value);
+        set => SetProperty(ref _selectedEstate, value);
         get => _selectedEstate;
     }
 
     public Realtor SelectedRealtor
     {
-        set => SetField(ref _selectedRealtor, value);
+        set => SetProperty(ref _selectedRealtor, value);
         get => _selectedRealtor;
     }
 
     public decimal Price
     {
-        set => SetField(ref _price, value);
+        set => SetProperty(ref _price, value);
         get => _price;
     }
 

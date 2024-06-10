@@ -35,60 +35,62 @@ public sealed class ClientViewModel : BaseSearch<Client>
 
     public Client? SelectedClient
     {
-        set => SetField(ref _selectedClient, value);
+        set => SetProperty(ref _selectedClient, value);
         get => _selectedClient;
     }
     
     public string Name
     {
-        set => SetField(ref _name, value);
+        set => SetProperty(ref _name, value);
         get => _name;
     }
 
     public string LastName
     {
-        set => SetField(ref _lastName, value);
+        set => SetProperty(ref _lastName, value);
         get => _lastName;
     }
 
     public string MiddleName
     {
-        set => SetField(ref _middleName, value);
+        set => SetProperty(ref _middleName, value);
         get => _middleName;
     }
 
     public string PhoneNumber
     {
-        set => SetField(ref _phoneNumber, value);
+        set => SetProperty(ref _phoneNumber, value);
         get => _phoneNumber;
     }
 
     public string Email
     {
-        set => SetField(ref _email, value);
+        set => SetProperty(ref _email, value);
         get => _email;
     }
 
     public string SearchName
     {
-        set => SetField(ref _searchName, value);
+        set => SetProperty(ref _searchName, value);
         get => _searchName;
     }
 
     public string SearchMiddleName
     {
-        set => SetField(ref _searchMiddleName, value);
+        set => SetProperty(ref _searchMiddleName, value);
         get => _searchMiddleName;
     }
 
     public string SearchLastName
     {
-        set => SetField(ref _searchLastName, value);
+        set => SetProperty(ref _searchLastName, value);
         get => _searchLastName;
     }
 
     public ObservableCollection<Client> Clients { private set; get; }
 
+    
+    
     protected override async Task Search()
     {
         var task = Task.Run(() =>

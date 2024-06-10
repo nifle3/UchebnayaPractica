@@ -5,6 +5,10 @@
              StartupUri="View/Login.xaml">
     <Application.Resources>
         
+        <Style TargetType="TextBox">
+            <Setter Property="MaxLength" Value="50"/>
+        </Style>
+        
         <Style TargetType="DataGrid">
             <Setter Property="AutoGenerateColumns" Value="False"/>
             <Setter Property="SelectionMode" Value="Single"/>

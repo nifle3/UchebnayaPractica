@@ -20,37 +20,37 @@ public sealed class ApartmentNeedViewModel : NeedViewModel<ApartmentsNeed>
 
     public double MinSquare
     {
-        set => SetField(ref _minSquare, value);
+        set => SetProperty(ref _minSquare, value);
         get => _minSquare;
     }
 
     public double MaxSquare
     {
-        set => SetField(ref _maxSquare, value);
+        set => SetProperty(ref _maxSquare, value);
         get => _maxSquare;
     }
 
     public int MinRoomsCount
     {
-        set => SetField(ref _minRoomsCount, value);
+        set => SetProperty(ref _minRoomsCount, value);
         get => _minRoomsCount;
     }
 
     public int MaxRoomsCount
     {
-        set => SetField(ref _maxRoomsCount, value);
+        set => SetProperty(ref _maxRoomsCount, value);
         get => _maxRoomsCount;
     }
 
     public int MinFloor
     {
-        set => SetField(ref _minFloor, value);
+        set => SetProperty(ref _minFloor, value);
         get => _minFloor;
     }
 
     public int MaxFloor
     {
-        set => SetField(ref _maxFloor, value);
+        set => SetProperty(ref _maxFloor, value);
         get => _maxFloor;
     }
 

@@ -20,25 +20,25 @@ public abstract class NeedViewModel<T> : BaseCrud<T>
 
     public Model.Client SelectedClient
     {
-        set => SetField(ref _selectedClient, value);
+        set => SetProperty(ref _selectedClient, value);
         get => _selectedClient;
     }
 
     public Model.Realtor SelectedRealtor
     {
-        set => SetField(ref _selectedRealtor, value);
+        set => SetProperty(ref _selectedRealtor, value);
         get => _selectedRealtor;
     }
 
     public decimal MinPrice
     {
-        set => SetField(ref _minPrice, value);
+        set => SetProperty(ref _minPrice, value);
         get => _minPrice;
     }
 
     public decimal MaxPrice
     {
-        set => SetField(ref _maxPrice, value);
+        set => SetProperty(ref _maxPrice, value);
         get => _maxPrice;
     }
 }
