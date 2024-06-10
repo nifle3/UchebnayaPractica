@@ -12,18 +12,18 @@ public class LoginViewModel : Base
     private const string InvalidEmailOrPassword = "Почта или пароль не правильные";
 
     private string _email = "";
-    private string _password = "";
+    private string _password = ""; 
 
     public LoginViewModel() : base() =>
         AuthenticationCommand = new RelayCommand(Authentication);
     
-    private string Email
+    public string Email
     {
         set => SetField(ref _email, value);
         get => _email;
     }
 
-    private string Password
+    public string Password
     {
         set => SetField(ref _password, value);
         get => _password;
@@ -33,12 +33,12 @@ public class LoginViewModel : Base
 
     private void Authentication()
     {
-        if (_email != TrueEmail || _password != TruePassword)
+        if (Email != TrueEmail || Password != TruePassword)
         {
-            WeakReferenceMessenger.Default.Send(new AlertMessage(InvalidEmailOrPassword));
+            WeakReferenceMessenger.Default.Send(new AlertMessage(InvalidEmailOrPassword, ErrorCaptionsMessage));
             return;
         }
-
+        
         WeakReferenceMessenger.Default.Send(new OpenWindowMessage());
     }
 }

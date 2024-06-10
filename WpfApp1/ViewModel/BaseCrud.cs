@@ -43,11 +43,11 @@ public abstract class BaseCrud<T> : Base
         var entity = await _crudService.AddAsync(result);
         if (entity is null)
         {
-            WeakReferenceMessenger.Default.Send(new AlertMessage(DbErrorMessage));
+            WeakReferenceMessenger.Default.Send(new AlertMessage(DbErrorMessage, ErrorCaptionsMessage));
             return;
         }
         
-        WeakReferenceMessenger.Default.Send(new AlertMessage(AddSuccessMessage));
+        WeakReferenceMessenger.Default.Send(new AlertMessage(AddSuccessMessage, SuccessCaptionsMessage));
         AddEvent?.Invoke(entity);
     }
 
@@ -58,12 +58,12 @@ public abstract class BaseCrud<T> : Base
         var result = await _crudService.RemoveAsync(entity);
         if (!result)
         {
-            WeakReferenceMessenger.Default.Send(new AlertMessage(DbErrorMessage));
+            WeakReferenceMessenger.Default.Send(new AlertMessage(DbErrorMessage, ErrorCaptionsMessage));
             return;
         }
         
         DeleteEvent?.Invoke(entity);
-        WeakReferenceMessenger.Default.Send(new AlertMessage(DeleteSuccessMessage));
+        WeakReferenceMessenger.Default.Send(new AlertMessage(DeleteSuccessMessage, SuccessCaptionsMessage));
     }
 
     private async Task Update(T? entity)
@@ -76,10 +76,10 @@ public abstract class BaseCrud<T> : Base
         var result = await _crudService.UpdateAsync(entity);
         if (!result)
         {
-            WeakReferenceMessenger.Default.Send(new AlertMessage(DbErrorMessage));
+            WeakReferenceMessenger.Default.Send(new AlertMessage(DbErrorMessage, ErrorCaptionsMessage));
             return;
         }
         
-        WeakReferenceMessenger.Default.Send(new AlertMessage(UpdateSuccessMessage));
+        WeakReferenceMessenger.Default.Send(new AlertMessage(UpdateSuccessMessage, SuccessCaptionsMessage));
     }
 }

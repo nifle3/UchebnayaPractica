@@ -130,7 +130,7 @@ public sealed class ClientViewModel : BaseSearch<Client>
     {
         if (!string.IsNullOrEmpty(client.Phone) || !string.IsNullOrEmpty(client.Email)) return true;
         
-        WeakReferenceMessenger.Default.Send(new AlertMessage("Телефон или почты должны быть заполнены"));
+        WeakReferenceMessenger.Default.Send(new AlertMessage("Телефон или почты должны быть заполнены", ErrorCaptionsMessage));
         return false;
     } 
 }
