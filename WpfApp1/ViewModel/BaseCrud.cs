@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using WpfApp1.Message;
@@ -57,6 +58,9 @@ public abstract class BaseCrud<T> : Base
     private async Task Delete(T? entity)
     {
         if (entity is null) return;
+
+        var messageBoxResult = MessageBox.Show("Вы действительно хотите удалить", "Подтвердите удаление");
+        if (messageBoxResult != MessageBoxResult.Yes) return;
 
         var result = await _crudService.RemoveAsync(entity);
         if (!result)
